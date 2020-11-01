@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeePayrollDBService {
-	
+	private PreparedStatement preparedStatement;
 	private PreparedStatement employeePayrollDataStatement;
 	private static EmployeePayrollDBService employeePayrollDBService;
 	private EmployeePayrollDBService() {
@@ -56,15 +56,16 @@ public class EmployeePayrollDBService {
 
 	public int updateEmployeeData(String name, double salary) {
 		// TODO Auto-generated method stub
-		return this.updateEmplyeeDataUsingStatement(name, salary);
+		return this.updateEmplyeeDataUsingPreparedStatement(name, salary);
 	}
 
-	private int updateEmplyeeDataUsingStatement(String name, double salary) {
+	private int updateEmplyeeDataUsingPreparedStatement(String name, double salary) {
 		// TODO Auto-generated method stub
 		String sql = String.format("Update emp_payroll set salary = %.2f where name = '%s'", salary, name);
 		try(Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			return statement.executeUpdate(sql);
+			//Statement statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(sql);
+			return preparedStatement.executeUpdate();
 		}
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
