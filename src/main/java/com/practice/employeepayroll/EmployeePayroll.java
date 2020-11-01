@@ -1,14 +1,22 @@
 package com.practice.employeepayroll;
 
+import java.time.LocalDate;
+
 public class EmployeePayroll {
 	private int id;
 	private String name;
 	private double salary;
-
+	public LocalDate startDate;
+	
 	public EmployeePayroll(int id, String name, double salary) {
 		this.id = id;
 		this.name = name;
 		this.salary = salary;
+		this.startDate = startDate;
+	}
+	public EmployeePayroll(int id, String name, double salary, LocalDate startDate) {
+		this(id, name, salary);
+		this.startDate = startDate;
 	}
 
 	public int getId() {
