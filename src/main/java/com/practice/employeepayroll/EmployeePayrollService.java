@@ -11,18 +11,21 @@ public class EmployeePayrollService {
 	}
 
 	private List<EmployeePayroll> employeePayrollList;
-
+	private EmployeePayrollDBService employeePayrollDBService;
+	
 	public EmployeePayrollService() {
 		// TODO Auto-generated constructor stub
+		employeePayrollDBService = EmployeePayrollDBService.getInstance();
 	}
 
 	public EmployeePayrollService(List<EmployeePayroll> employeePayrollList) {
+		this();
 		this.employeePayrollList = employeePayrollList;
 	}
 	
 	public List<EmployeePayroll> readEmployeePayrollData(IOService ioService) throws SQLException{
 		if(ioService.equals(IOService.DB_IO))
-			this.employeePayrollList = new EmployeePayrollDBService().readData();
+			this.employeePayrollList = employeePayrollDBService.readData();
 		return this.employeePayrollList;
 	}
 
@@ -65,5 +68,33 @@ public class EmployeePayrollService {
 			return new EmployeePayrollFileIOService().countEntriesFromFile();
 		}
 		else return 0;
+	}
+
+	public void updateEmployeeSalary(String name, double salary) {
+		// TODO Auto-generated method stub
+		int result = employeePayrollDBService.updateEmployeeData(name, salary);
+		if(result == 0) return;
+		EmployeePayroll employeePayroll = this.getEmployeePayrollData(name);
+		if(employeePayroll != null) {
+			employeePayroll.salary = salary;
+		}
+	}
+
+	private EmployeePayroll getEmployeePayrollData(String name)  {
+		// TODO Auto-generated method stub
+		EmployeePayroll ep;
+		ep = this.employeePayrollList.stream()
+				.filter(e -> e.getName().equals(name))
+				.findFirst()
+				.orElse(employeePayrollList.get(1));
+		System.out.println(employeePayrollList.get(1));
+		return ep;
+	}
+
+	public boolean checkEmployeePayrollInSyncWithDB(String name){
+		// TODO Auto-generated method stub
+		List<EmployeePayroll> employeePayrollList = employeePayrollDBService.getEmployeePayrollData(name);
+		boolean ans =  employeePayrollList.get(0).equals(getEmployeePayrollData(name));
+		return ans;
 	}
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class EmployeePayroll {
 	private int id;
 	private String name;
-	private double salary;
+	public double salary;
 	public LocalDate startDate;
 	
 	public EmployeePayroll(int id, String name, double salary) {
@@ -42,8 +42,17 @@ public class EmployeePayroll {
 	public void setSalary(double salary) {
 		this.salary = salary;
 	}
-
+	@Override
 	public String toString() {
 		return "id=" + id + ", name=" + name + ", salary=" + salary;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		EmployeePayroll that = (EmployeePayroll) o;
+		return id == that.id && Double.compare(that.salary, salary) == 0 && name.equals(that.name);
+		
 	}
 }

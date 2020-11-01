@@ -19,7 +19,7 @@ public class PayrollTest {
 	EmployeePayrollService EPS=new EmployeePayrollService(arrEmp);
 	EPS.writeData(IOService.FILE_IO);
 	long count=EPS.countEntries(IOService.FILE_IO);
-	System.out.println(count);
+	//System.out.println(count);
 	Assert.assertEquals(3,count);
 	}
 	
@@ -27,7 +27,16 @@ public class PayrollTest {
 	public void givenEmployeePayrollInDB_WhenRetrived_ShouldMatchEmployeeCount() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayroll> employeePayroll = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		System.out.println(employeePayroll.size());
+		//System.out.println(employeePayroll.size());
 		Assert.assertEquals(3, employeePayroll.size());
+	}
+	
+	@Test
+	public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayroll> employeePayroll = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		employeePayrollService.updateEmployeeSalary("Terisa", 3000000.00);
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+		Assert.assertTrue(result);
 	}
 }
