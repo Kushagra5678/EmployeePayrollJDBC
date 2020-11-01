@@ -12,7 +12,7 @@ public class EmployeePayrollService {
 
 	private List<EmployeePayroll> employeePayrollList;
 	private EmployeePayrollDBService employeePayrollDBService;
-	
+
 	public EmployeePayrollService() {
 		// TODO Auto-generated constructor stub
 		employeePayrollDBService = EmployeePayrollDBService.getInstance();
@@ -22,9 +22,9 @@ public class EmployeePayrollService {
 		this();
 		this.employeePayrollList = employeePayrollList;
 	}
-	
-	public List<EmployeePayroll> readEmployeePayrollData(IOService ioService) throws SQLException{
-		if(ioService.equals(IOService.DB_IO))
+
+	public List<EmployeePayroll> readEmployeePayrollData(IOService ioService) throws SQLException {
+		if (ioService.equals(IOService.DB_IO))
 			this.employeePayrollList = employeePayrollDBService.readData();
 		return this.employeePayrollList;
 	}
@@ -40,12 +40,10 @@ public class EmployeePayrollService {
 	}
 
 	public void writeData(IOService iOService) {
-		if(iOService.equals(IOService.CONSOLE_IO)) {
-		System.out.println("Writing Employee Payroll Details To The Console : ");
-		System.out.println(employeePayrollList);
-		}
-		else if(iOService.equals(IOService.FILE_IO))
-		{
+		if (iOService.equals(IOService.CONSOLE_IO)) {
+			System.out.println("Writing Employee Payroll Details To The Console : ");
+			System.out.println(employeePayrollList);
+		} else if (iOService.equals(IOService.FILE_IO)) {
 			new EmployeePayrollFileIOService().writeDataInFile(employeePayrollList);
 		}
 	}
@@ -55,46 +53,41 @@ public class EmployeePayrollService {
 		EmployeePayrollService EPS = new EmployeePayrollService(empdetailslist);
 		Scanner sc = new Scanner(System.in);
 		EPS.readData(sc);
-		
+
 	}
 
 	public long countEntries(IOService fileIo) {
-		if(fileIo.equals(IOService.CONSOLE_IO))
-		{
+		if (fileIo.equals(IOService.CONSOLE_IO)) {
 			return employeePayrollList.size();
-		}
-		else if(fileIo.equals(IOService.FILE_IO))
-		{
+		} else if (fileIo.equals(IOService.FILE_IO)) {
 			return new EmployeePayrollFileIOService().countEntriesFromFile();
-		}
-		else return 0;
+		} else
+			return 0;
 	}
 
 	public void updateEmployeeSalary(String name, double salary) {
 		// TODO Auto-generated method stub
 		int result = employeePayrollDBService.updateEmployeeData(name, salary);
-		if(result == 0) return;
+		if (result == 0)
+			return;
 		EmployeePayroll employeePayroll = this.getEmployeePayrollData(name);
-		if(employeePayroll != null) {
+		if (employeePayroll != null) {
 			employeePayroll.salary = salary;
 		}
 	}
 
-	private EmployeePayroll getEmployeePayrollData(String name)  {
+	private EmployeePayroll getEmployeePayrollData(String name) {
 		// TODO Auto-generated method stub
 		EmployeePayroll ep;
-		ep = this.employeePayrollList.stream()
-				.filter(e -> e.getName().equals(name))
-				.findFirst()
+		ep = this.employeePayrollList.stream().filter(e -> e.getName().equals(name)).findFirst()
 				.orElse(employeePayrollList.get(1));
-		System.out.println(employeePayrollList.get(1));
 		return ep;
 	}
 
-	public boolean checkEmployeePayrollInSyncWithDB(String name){
+	public boolean checkEmployeePayrollInSyncWithDB(String name) {
 		// TODO Auto-generated method stub
 		List<EmployeePayroll> employeePayrollList = employeePayrollDBService.getEmployeePayrollData(name);
-		boolean ans =  employeePayrollList.get(0).equals(getEmployeePayrollData(name));
+		boolean ans = employeePayrollList.get(0).equals(getEmployeePayrollData(name));
 		return ans;
 	}
 }

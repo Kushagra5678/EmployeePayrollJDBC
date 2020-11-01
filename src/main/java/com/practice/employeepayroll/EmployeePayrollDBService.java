@@ -55,12 +55,10 @@ public class EmployeePayrollDBService {
 	}
 
 	public int updateEmployeeData(String name, double salary) {
-		// TODO Auto-generated method stub
 		return this.updateEmplyeeDataUsingPreparedStatement(name, salary);
 	}
 
 	private int updateEmplyeeDataUsingPreparedStatement(String name, double salary) {
-		// TODO Auto-generated method stub
 		String sql = String.format("Update emp_payroll set salary = %.2f where name = '%s'", salary, name);
 		try(Connection connection = this.getConnection()) {
 			//Statement statement = connection.createStatement();
