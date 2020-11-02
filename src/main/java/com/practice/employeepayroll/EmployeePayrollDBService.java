@@ -1,6 +1,7 @@
 package com.practice.employeepayroll;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,21 +27,7 @@ public class EmployeePayrollDBService {
 	
 	public List<EmployeePayroll> readData() {
 		String sql = "Select * from emp_payroll;";
-		List<EmployeePayroll> employeePayrollList = new ArrayList<>();
-		try {
-			Connection connection = this.getConnection();
-			Statement statement = connection.createStatement();
-			ResultSet result = statement.executeQuery(sql);
-			employeePayrollList = this.getEmployeePayrollData(result);
-			connection.close();
-		}
-		
-		catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return employeePayrollList;
+		return this.getEmployeePayrollDataUsingDB(sql);
 	}
 	
 	private Connection getConnection() throws SQLException {
@@ -119,5 +106,30 @@ public class EmployeePayrollDBService {
 		}
 		
 		
+	}
+	public List<EmployeePayroll> getEmployeePayrollForDateRange(LocalDate startDate, LocalDate endDate) {
+		// TODO Auto-generated method stub
+		String sql = String.format("select * from emp_payroll where start between '%s' and '%s';",
+				Date.valueOf(startDate), Date.valueOf(endDate));
+		return this.getEmployeePayrollDataUsingDB(sql);
+	}
+	
+	private List<EmployeePayroll> getEmployeePayrollDataUsingDB(String sql) {
+		// TODO Auto-generated method stub
+		List<EmployeePayroll> employeePayrollList = new ArrayList<>();
+		try {
+			Connection connection = this.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			employeePayrollList = this.getEmployeePayrollData(result);
+			connection.close();
+		}
+		
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return employeePayrollList;
 	}
 }

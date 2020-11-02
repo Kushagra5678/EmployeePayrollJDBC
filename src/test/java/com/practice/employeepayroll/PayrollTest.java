@@ -1,6 +1,7 @@
 package com.practice.employeepayroll;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,5 +48,15 @@ public class PayrollTest {
 		employeePayrollService.updateEmployeeSalary("Terisa", 3000000.00);
 		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
 		Assert.assertTrue(result);
+	}
+	
+	@Test
+	public void givenDateRange_WhenRetrived_ShouldMatchEmployeeCount() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		LocalDate startDate = LocalDate.of(2018, 01, 01);
+		LocalDate endDate = LocalDate.now();
+		List<EmployeePayroll> employeePayroll = employeePayrollService.readEmployeePayrollForDateRange(IOService.DB_IO, startDate, endDate);
+		Assert.assertEquals(3, employeePayroll.size());
 	}
 }

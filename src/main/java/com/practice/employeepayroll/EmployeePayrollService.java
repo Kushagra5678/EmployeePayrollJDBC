@@ -1,6 +1,7 @@
 package com.practice.employeepayroll;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -89,5 +90,13 @@ public class EmployeePayrollService {
 		List<EmployeePayroll> employeePayrollList = employeePayrollDBService.getEmployeePayrollData(name);
 		boolean ans = employeePayrollList.get(0).equals(getEmployeePayrollData(name));
 		return ans;
+	}
+
+	public List<EmployeePayroll> readEmployeePayrollForDateRange(IOService ioService, LocalDate startDate,
+			LocalDate endDate) {
+		// TODO Auto-generated method stub
+		if(ioService.equals(IOService.DB_IO))
+			return employeePayrollDBService.getEmployeePayrollForDateRange(startDate, endDate);
+		return null;
 	}
 }
