@@ -30,7 +30,7 @@ public class PayrollTest {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayroll> employeePayroll = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
 		//System.out.println(employeePayroll.size());
-		Assert.assertEquals(3, employeePayroll.size());
+		Assert.assertEquals(4, employeePayroll.size());
 	}
 	
 //	@Test
@@ -68,5 +68,15 @@ public class PayrollTest {
 		Map<String, Double> averageSalaryByGender = employeePayrollService.readAverageSalaryByGender(IOService.DB_IO);
 		Assert.assertTrue(averageSalaryByGender.get("M").equals(2000000.00) &&
 				averageSalaryByGender.get("F").equals(3000000.00));
+	}
+	
+	@Test
+	public void givenNewEmployee_WhenAdded_ShouldSyncWihDB() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		employeePayrollService.addEmployeeToPayroll("Mark", 5000000.00, LocalDate.now(), "M");
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
+		Assert.assertTrue(result);
+		
 	}
 }
